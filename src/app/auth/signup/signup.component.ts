@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, of } from 'rxjs';
 
 function emailIsUnique(control: AbstractControl) {
@@ -62,6 +62,11 @@ export class SignupComponent implements OnInit {
     role: new FormControl<'student' | 'teacher' | 'employee' | 'founder' | 'other'>('student', {
       validators: [Validators.required]
     }),
+    source: new FormArray([
+      new FormControl(false),
+      new FormControl(false),
+      new FormControl(false)
+    ]),
     agree: new FormControl(false, {
       validators: [Validators.required]
     })
@@ -84,6 +89,7 @@ export class SignupComponent implements OnInit {
   onSubmit() {
     console.log(this.form.value.email, this.form.value.passwords?.password);
     console.log('Address ',this.form.value.address);
+    console.log('Source ',this.form.value.source);
   }
 
   onReset() {
