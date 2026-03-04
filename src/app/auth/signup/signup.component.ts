@@ -17,6 +17,15 @@ function mustContainQuestionMark(control: AbstractControl) {
   return { doesNotContainQuestionMark: true };
 }
 
+function equalValues(control: AbstractControl) {
+  const password = control.get('password')?.value;
+  const confirmPassword = control.get('confirmPassword')?.value;
+  if (password === confirmPassword) {
+    return null;
+  }
+  return { passwordNotEqual: true };
+}
+
 
 @Component({
   selector: 'app-signup',
@@ -38,6 +47,8 @@ export class SignupComponent implements OnInit {
       confirmPassword: new FormControl('', {
         validators: [Validators.required, Validators.minLength(6)]
       })
+    }, {
+      validators: [equalValues]
     }),
     firstName: new FormControl('', {
       validators: [Validators.required, Validators.minLength(2)]
@@ -87,9 +98,11 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.form.value.email, this.form.value.passwords?.password);
-    console.log('Address ',this.form.value.address);
-    console.log('Source ',this.form.value.source);
+    if (this.form.invalid) {
+      console.log('INVALID FORM');
+      return;
+    }
+    console.log(this.form);
   }
 
   onReset() {
