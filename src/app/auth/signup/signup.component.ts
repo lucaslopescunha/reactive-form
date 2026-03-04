@@ -17,13 +17,22 @@ function mustContainQuestionMark(control: AbstractControl) {
   return { doesNotContainQuestionMark: true };
 }
 
-function equalValues(control: AbstractControl) {
-  const password = control.get('password')?.value;
-  const confirmPassword = control.get('confirmPassword')?.value;
-  if (password === confirmPassword) {
-    return null;
-  }
-  return { passwordNotEqual: true };
+/**
+ * Factory function 
+ * @param controlName1 
+ * @param controlName2 
+ * @returns 
+ */
+function equalValues(controlName1: string, controlName2: string) {
+  return (control: AbstractControl) => {
+    const val1 = control.get(controlName1)?.value;
+    const val2 = control.get(controlName2)?.value;
+    if (val1 === val2) {
+      return null;
+    }
+    return { valuesNotEqual: true };
+
+  };
 }
 
 
@@ -48,7 +57,7 @@ export class SignupComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(6)]
       })
     }, {
-      validators: [equalValues]
+      validators: [equalValues('password', 'confirmPassword')]
     }),
     firstName: new FormControl('', {
       validators: [Validators.required, Validators.minLength(2)]
