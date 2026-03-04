@@ -31,11 +31,13 @@ export class SignupComponent implements OnInit {
       validators: [Validators.email, Validators.required],
       asyncValidators: [emailIsUnique]
     }),
-    password: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(6), mustContainQuestionMark]
-    }),
-    confirmPassword: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(6)]
+    passwords: new FormGroup({
+      password: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(6), mustContainQuestionMark]
+      }),
+      confirmPassword: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(6)]
+      })
     }),
     firstName: new FormControl('', {
       validators: [Validators.required, Validators.minLength(2)]
@@ -43,19 +45,21 @@ export class SignupComponent implements OnInit {
     lastName: new FormControl('', {
       validators: [Validators.required, Validators.minLength(2)]
     }),
-    street: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(2)]
+    address: new FormGroup({
+      street: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(2)]
+      }),
+      number: new FormControl('', {
+        validators: [Validators.required]
+      }),
+      postalCode: new FormControl('', {
+        validators: [Validators.required]
+      }),
+      city: new FormControl('', {
+        validators: [Validators.required]
+      })
     }),
-    number: new FormControl('', {
-      validators: [Validators.required]
-    }),
-    postalCode: new FormControl('', {
-      validators: [Validators.required]
-    }),
-    city: new FormControl('', {
-      validators: [Validators.required]
-    }),
-    role: new FormControl<'student' | 'teacher' | 'employee' | 'founder' | 'other' >('student', {
+    role: new FormControl<'student' | 'teacher' | 'employee' | 'founder' | 'other'>('student', {
       validators: [Validators.required]
     }),
     agree: new FormControl(false, {
@@ -78,7 +82,8 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.form.value.email, this.form.value.password);
+    console.log(this.form.value.email, this.form.value.passwords?.password);
+    console.log('Address ',this.form.value.address);
   }
 
   onReset() {
@@ -92,8 +97,8 @@ export class SignupComponent implements OnInit {
   }
 
   get passwordIsInvalid() {
-    return this.form.controls.password.touched &&
-      this.form.controls.password.dirty &&
-      this.form.controls.password.invalid;
+    return this.form.controls.passwords.controls.password.touched &&
+      this.form.controls.passwords.controls.password.dirty &&
+      this.form.controls.passwords.controls.password.invalid;
   }
 }
